@@ -40,8 +40,11 @@ public class BanCo {
     }
 
     public void setQuanCo(QuanCo quanCo) {
-        toaDoBanCo[quanCo.getToaDo().getY()][quanCo.getToaDo().getX()] = quanCo;
-        dsQuanCo.add(quanCo);
+        if(toaDoBanCo[quanCo.getToaDo().getY()][quanCo.getToaDo().getX()] == null) {
+            toaDoBanCo[quanCo.getToaDo().getY()][quanCo.getToaDo().getX()] = quanCo;
+            dsQuanCo.add(quanCo);
+            this.setCurrentPlayer(currentPlayer.getDoiThu());
+        }
     }
 
     public QuanCo getQuanCo(ToaDo toaDo) {

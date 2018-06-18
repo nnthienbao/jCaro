@@ -16,7 +16,6 @@ public abstract class Player {
 
     public void hit(ToaDo toaDo) {
         banCo.setQuanCo(taoQuanCo(toaDo));
-        banCo.setCurrentPlayer(doiThu);
     }
 
     public Player getDoiThu() {
