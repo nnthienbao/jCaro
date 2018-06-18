@@ -4,6 +4,8 @@ import engine.player.Player;
 import engine.player.PlayerO;
 import engine.player.PlayerX;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -60,6 +62,22 @@ public class BanCo {
 
     public Player getOPlayer() {
         return playerO;
+    }
+
+    public int getTotalRow() {
+        return TOTAL_ROW;
+    }
+
+    public int getTotalColumn() {
+        return TOTAL_COLUMN;
+    }
+
+    public int getTotalTileToWin() {
+        return TOTAL_TILE_TO_WIN;
+    }
+
+    public Collection<QuanCo> getDanhSachQuanCo() {
+        return Collections.unmodifiableCollection(dsQuanCo);
     }
 
     public Player kiemTraThangThua() {

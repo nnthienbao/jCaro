@@ -1,5 +1,7 @@
 package engine.board;
 
+import java.util.Objects;
+
 public class QuanCo {
     private ToaDo toaDo;
     private LoaiQuanCo loaiQuanCo;
@@ -23,6 +25,20 @@ public class QuanCo {
 
     public void setLoaiQuanCo(LoaiQuanCo loaiQuanCo) {
         this.loaiQuanCo = loaiQuanCo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QuanCo quanCo = (QuanCo) o;
+        return Objects.equals(toaDo, quanCo.toaDo) &&
+                loaiQuanCo == quanCo.loaiQuanCo;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(toaDo, loaiQuanCo);
     }
 
     public enum LoaiQuanCo {
