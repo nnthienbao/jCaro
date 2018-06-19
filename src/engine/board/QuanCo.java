@@ -41,8 +41,25 @@ public class QuanCo {
         return Objects.hash(toaDo, loaiQuanCo);
     }
 
+    @Override
+    public String toString() {
+        return loaiQuanCo.toString()  + toaDo.toString();
+    }
+
     public enum LoaiQuanCo {
-        X,
-        O
+        X {
+            @Override
+            public String toString() {
+                return "X";
+            }
+        },
+        O {
+            @Override
+            public String toString() {
+                return "O";
+            }
+        };
+
+        public abstract String toString();
     }
 }

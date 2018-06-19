@@ -4,17 +4,16 @@ import engine.player.Player;
 import engine.player.PlayerO;
 import engine.player.PlayerX;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class BanCo {
     private final int TOTAL_ROW;
     private final int TOTAL_COLUMN;
     private final int TOTAL_TILE_TO_WIN;
     private QuanCo[][] toaDoBanCo = null;
-    private Set<QuanCo> dsQuanCo = new HashSet<>();
+    private List<QuanCo> dsQuanCo = new ArrayList<>();
     private Player playerX;
     private Player playerO;
     private Player currentPlayer;
@@ -48,6 +47,7 @@ public class BanCo {
     }
 
     public QuanCo getQuanCo(ToaDo toaDo) {
+        if(toaDo.getX() < 0 || toaDo.getX() >= TOTAL_COLUMN || toaDo.getY() < 0 || toaDo.getY() >= TOTAL_ROW) return null;
         return toaDoBanCo[toaDo.getY()][toaDo.getX()];
     }
 
@@ -272,6 +272,194 @@ public class BanCo {
         return (count >= TOTAL_TILE_TO_WIN - 1 && (quanCoChanCheoTren == null || quanCoChanCheoDuoi == null));
     }
 
+    public int tinhTongSoDuong(int duong, QuanCo.LoaiQuanCo loaiQuanCo) {
+        return tinhTongSoDuongHangDoc(duong, loaiQuanCo)
+                + tinhTongSoDuongHangNgang(duong, loaiQuanCo)
+                + tinhTongSoDuongHangCheoChinh(duong, loaiQuanCo)
+                + tinhTongSoDuongHangCheoPhu(duong, loaiQuanCo);
+    }
+
+    private int tinhTongSoDuongHangDoc(int duong, QuanCo.LoaiQuanCo loaiQuanCo) {
+        int count = 0;
+        List<QuanCo> dsQuanCoDaXet = new ArrayList<>();
+        for(QuanCo quanCoDangXet : dsQuanCo) {
+            if(quanCoDangXet.getLoaiQuanCo() == loaiQuanCo) {
+                if(dsQuanCoDaXet.contains(quanCoDangXet)) continue;
+                int countDuong = 1;
+                boolean kiemTraTren = true, kiemTraDuoi = true;
+                for(int i = 1; kiemTraTren || kiemTraDuoi; i++) {
+                    if(kiemTraTren) {
+                        QuanCo quanCoTren = getQuanCo(new ToaDo(quanCoDangXet.getToaDo().getX(), quanCoDangXet.getToaDo().getY() - i));
+                        if (quanCoTren == null) {
+                            kiemTraTren = false;
+                            break;
+                        } else {
+                            countDuong++;
+                            dsQuanCoDaXet.add(quanCoTren);
+                        }
+                    }
+                    if(kiemTraDuoi) {
+                        QuanCo quanCoDuoi = getQuanCo(new ToaDo(quanCoDangXet.getToaDo().getX(), quanCoDangXet.getToaDo().getY() + i));
+                        if (quanCoDuoi == null) {
+                            kiemTraDuoi = false;
+                            break;
+                        } else {
+                            countDuong++;
+                            dsQuanCoDaXet.add(quanCoDuoi);
+                        }
+                    }
+                }
+                if(countDuong == duong) count++;
+                dsQuanCoDaXet.add(quanCoDangXet);
+            }
+        }
+        return count;
+    }
+
+    private int tinhTongSoDuongHangNgang(int duong, QuanCo.LoaiQuanCo loaiQuanCo) {
+        int count = 0;
+        List<QuanCo> dsQuanCoDaXet = new ArrayList<>();
+        for(QuanCo quanCoDangXet : dsQuanCo) {
+            if(quanCoDangXet.getLoaiQuanCo() == loaiQuanCo) {
+                if(dsQuanCoDaXet.contains(quanCoDangXet)) continue;
+                int countDuong = 1;
+                boolean kiemTraTren = true, kiemTraDuoi = true;
+                for(int i = 1; kiemTraTren || kiemTraDuoi; i++) {
+                    if(kiemTraTren) {
+                        QuanCo quanCoTren = getQuanCo(new ToaDo(quanCoDangXet.getToaDo().getX() - i, quanCoDangXet.getToaDo().getY()));
+                        if (quanCoTren == null) {
+                            kiemTraTren = false;
+                            break;
+                        } else {
+                            countDuong++;
+                            dsQuanCoDaXet.add(quanCoTren);
+                        }
+                    }
+                    if(kiemTraDuoi) {
+                        QuanCo quanCoDuoi = getQuanCo(new ToaDo(quanCoDangXet.getToaDo().getX() + i, quanCoDangXet.getToaDo().getY()));
+                        if (quanCoDuoi == null) {
+                            kiemTraDuoi = false;
+                            break;
+                        } else {
+                            countDuong++;
+                            dsQuanCoDaXet.add(quanCoDuoi);
+                        }
+                    }
+                }
+                if(countDuong == duong) count++;
+                dsQuanCoDaXet.add(quanCoDangXet);
+            }
+        }
+        return count;
+    }
+
+    private int tinhTongSoDuongHangCheoChinh(int duong, QuanCo.LoaiQuanCo loaiQuanCo) {
+        int count = 0;
+        List<QuanCo> dsQuanCoDaXet = new ArrayList<>();
+        for(QuanCo quanCoDangXet : dsQuanCo) {
+            if(quanCoDangXet.getLoaiQuanCo() == loaiQuanCo) {
+                if(dsQuanCoDaXet.contains(quanCoDangXet)) continue;
+                int countDuong = 1;
+                boolean kiemTraCheoTren = true, kiemTraCheoDuoi = true;
+                for(int i = 1; kiemTraCheoTren || kiemTraCheoDuoi; i++) {
+                    if(kiemTraCheoTren) {
+                        QuanCo quanCoCheoTren = getQuanCo(new ToaDo(quanCoDangXet.getToaDo().getX() + i, quanCoDangXet.getToaDo().getY() - i));
+                        if (quanCoCheoTren == null) {
+                            kiemTraCheoTren = false;
+                            break;
+                        } else {
+                            countDuong++;
+                            dsQuanCoDaXet.add(quanCoCheoTren);
+                        }
+                    }
+                    if(kiemTraCheoDuoi) {
+                        QuanCo quanCoCheoDuoi = getQuanCo(new ToaDo(quanCoDangXet.getToaDo().getX() - i, quanCoDangXet.getToaDo().getY() + i));
+                        if (quanCoCheoDuoi == null) {
+                            kiemTraCheoDuoi = false;
+                            break;
+                        } else {
+                            countDuong++;
+                            dsQuanCoDaXet.add(quanCoCheoDuoi);
+                        }
+                    }
+                }
+                if(countDuong == duong) count++;
+                dsQuanCoDaXet.add(quanCoDangXet);
+            }
+        }
+        return count;
+    }
+
+    private int tinhTongSoDuongHangCheoPhu(int duong, QuanCo.LoaiQuanCo loaiQuanCo) {
+        int count = 0;
+        List<QuanCo> dsQuanCoDaXet = new ArrayList<>();
+        for(QuanCo quanCoDangXet : dsQuanCo) {
+            if(quanCoDangXet.getLoaiQuanCo() == loaiQuanCo) {
+                if(dsQuanCoDaXet.contains(quanCoDangXet)) continue;
+                int countDuong = 1;
+                boolean kiemTraCheoTren = true, kiemTraCheoDuoi = true;
+                for(int i = 1; kiemTraCheoTren || kiemTraCheoDuoi; i++) {
+                    if(kiemTraCheoTren) {
+                        QuanCo quanCoCheoTren = getQuanCo(new ToaDo(quanCoDangXet.getToaDo().getX() - i, quanCoDangXet.getToaDo().getY() - i));
+                        if (quanCoCheoTren == null) {
+                            kiemTraCheoTren = false;
+                            break;
+                        } else {
+                            countDuong++;
+                            dsQuanCoDaXet.add(quanCoCheoTren);
+                        }
+                    }
+                    if(kiemTraCheoDuoi) {
+                        QuanCo quanCoCheoDuoi = getQuanCo(new ToaDo(quanCoDangXet.getToaDo().getX() + i, quanCoDangXet.getToaDo().getY() + i));
+                        if (quanCoCheoDuoi == null) {
+                            kiemTraCheoDuoi = false;
+                            break;
+                        } else {
+                            countDuong++;
+                            dsQuanCoDaXet.add(quanCoCheoDuoi);
+                        }
+                    }
+                }
+                if(countDuong == duong) count++;
+                dsQuanCoDaXet.add(quanCoDangXet);
+            }
+        }
+        return count;
+    }
+
+    public int tinhSuTuongTacGiuaCacQuanCo(QuanCo.LoaiQuanCo loaiQuanCo) {
+        int suTuongTac = 0;
+        for(QuanCo quanCoDangXet : dsQuanCo) {
+            if(quanCoDangXet.getLoaiQuanCo() == loaiQuanCo) {
+                for(ToaDo toaDo : quanCoDangXet.getToaDo().getToaDoXungQuanh()) {
+                    QuanCo quanCo = getQuanCo(toaDo);
+                    if (quanCo != null && quanCo.getLoaiQuanCo() == loaiQuanCo) {
+                        suTuongTac += 1;
+                    }
+                }
+            }
+        }
+        return suTuongTac;
+    }
+
+    public int tinhTongSoLanChanQuanCuaDoiThu(QuanCo.LoaiQuanCo loaiQuanCo) {
+        int tongSoLanChan = 0;
+        Set<QuanCo> quanCoBiChanDaXet = new HashSet<>();
+        for(QuanCo quanCoDangXet : dsQuanCo) {
+            if(quanCoDangXet.getLoaiQuanCo() == loaiQuanCo) {
+                for(ToaDo toaDo : quanCoDangXet.getToaDo().getToaDoXungQuanh()) {
+                    QuanCo quanCo = getQuanCo(toaDo);
+                    if(quanCo != null && quanCoBiChanDaXet.contains(quanCo)) continue;
+                    if(quanCo != null && quanCo.getLoaiQuanCo() != loaiQuanCo) {
+                        tongSoLanChan += 1;
+                        quanCoBiChanDaXet.add(quanCo);
+                    }
+                }
+            }
+        }
+        return tongSoLanChan;
+    }
+
     public static BanCo taoBanCoCoBan() {
         Builder builder = new Builder(20, 20, 5);
         return builder.build();
@@ -290,6 +478,10 @@ public class BanCo {
 
         public void setQuanCo(QuanCo quanCo) {
             banCo.setQuanCo(quanCo);
+        }
+
+        public void setCurrentPlayer(Player player) {
+             banCo.setCurrentPlayer(player);
         }
 
         public BanCo build() {

@@ -69,16 +69,6 @@ public class BanCoPanel extends JPanel implements MouseListener{
     }
 
     @Override
-    public void mouseClicked(MouseEvent mouseEvent) {
-
-    }
-
-    private ToaDo convertToaDoManhinhThanhToaDoBanCo(int x, int y) {
-        return new ToaDo(x / CELL_SIZE, y / CELL_SIZE);
-    }
-
-    // Khog dung
-    @Override
     public void mousePressed(MouseEvent mouseEvent) {
         ToaDo toaDoBanCo = convertToaDoManhinhThanhToaDoBanCo(mouseEvent.getX(), mouseEvent.getY());
         banCo.getCurrentPlayer().hit(toaDoBanCo);
@@ -93,20 +83,19 @@ public class BanCoPanel extends JPanel implements MouseListener{
         }
     }
 
-    @Override
-    public void mouseReleased(MouseEvent mouseEvent) {
-
+    private ToaDo convertToaDoManhinhThanhToaDoBanCo(int x, int y) {
+        return new ToaDo(x / CELL_SIZE, y / CELL_SIZE);
     }
 
+    // Khog dung
     @Override
-    public void mouseEntered(MouseEvent mouseEvent) {
-
-    }
-
+    public void mouseClicked(MouseEvent mouseEvent) { }
     @Override
-    public void mouseExited(MouseEvent mouseEvent) {
-
-    }
+    public void mouseReleased(MouseEvent mouseEvent) { }
+    @Override
+    public void mouseEntered(MouseEvent mouseEvent) { }
+    @Override
+    public void mouseExited(MouseEvent mouseEvent) { }
 }
 
 

@@ -13,4 +13,9 @@ public class PlayerX extends Player {
     public QuanCo taoQuanCo(ToaDo toaDo) {
         return new QuanCo(toaDo, QuanCo.LoaiQuanCo.X);
     }
+
+    @Override
+    public String toString() {
+        return "X";
+    }
 }

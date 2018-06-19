@@ -6,6 +6,53 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class TestBanCo {
+
+    @Test
+    public void TestTinhTongSoDuong() {
+        BanCo banCo = BanCo.taoBanCoCoBan();
+        banCo.setCurrentPlayer(banCo.getXPlayer());
+        Player xPlayer = banCo.getXPlayer();
+        assertEquals(0, banCo.tinhTongSoDuong(2, QuanCo.LoaiQuanCo.X));
+        xPlayer.hit(new ToaDo(2,2));
+        xPlayer.hit(new ToaDo(2,3));
+        xPlayer.hit(new ToaDo(3,2));
+        xPlayer.hit(new ToaDo(3,3));
+        assertEquals(6, banCo.tinhTongSoDuong(2, QuanCo.LoaiQuanCo.X));
+    }
+
+    @Test
+    public void TestSuTuongTacGiuaCacQuanCo() {
+        BanCo banCo = BanCo.taoBanCoCoBan();
+        banCo.setCurrentPlayer(banCo.getXPlayer());
+        Player xPlayer = banCo.getXPlayer();
+        assertEquals(banCo.tinhSuTuongTacGiuaCacQuanCo(QuanCo.LoaiQuanCo.X), 0);
+        xPlayer.hit(new ToaDo(5, 6));
+        assertEquals(banCo.tinhSuTuongTacGiuaCacQuanCo(QuanCo.LoaiQuanCo.X), 0);
+        xPlayer.hit(new ToaDo(6, 6));
+        assertEquals(banCo.tinhSuTuongTacGiuaCacQuanCo(QuanCo.LoaiQuanCo.X), 2);
+        xPlayer.hit(new ToaDo(5, 7));
+        xPlayer.hit(new ToaDo(6, 7));
+        assertEquals(banCo.tinhSuTuongTacGiuaCacQuanCo(QuanCo.LoaiQuanCo.X), 12);
+    }
+
+    @Test
+    public void TestTinhTongSoLanChanQuanDoiThu() {
+        BanCo banCo = BanCo.taoBanCoCoBan();
+        banCo.setCurrentPlayer(banCo.getXPlayer());
+        Player xPlayer = banCo.getXPlayer(), oPlayer = banCo.getOPlayer();
+        assertEquals(0, banCo.tinhTongSoLanChanQuanCuaDoiThu(QuanCo.LoaiQuanCo.X));
+        xPlayer.hit(new ToaDo(5, 5));
+        assertEquals(0, banCo.tinhTongSoLanChanQuanCuaDoiThu(QuanCo.LoaiQuanCo.X));
+        oPlayer.hit(new ToaDo(5, 6));
+        assertEquals(1, banCo.tinhTongSoLanChanQuanCuaDoiThu(QuanCo.LoaiQuanCo.X));
+        assertEquals(1, banCo.tinhTongSoLanChanQuanCuaDoiThu(QuanCo.LoaiQuanCo.O));
+        oPlayer.hit(new ToaDo(6, 5));
+        oPlayer.hit(new ToaDo(7, 7));
+        oPlayer.hit(new ToaDo(4, 4));
+        assertEquals(3, banCo.tinhTongSoLanChanQuanCuaDoiThu(QuanCo.LoaiQuanCo.X));
+        assertEquals(1, banCo.tinhTongSoLanChanQuanCuaDoiThu(QuanCo.LoaiQuanCo.O));
+    }
+
     @Test
     public void TestKiemTraThangThuaHangDoc() {
         BanCo banCo = BanCo.taoBanCoCoBan();

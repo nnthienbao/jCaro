@@ -1,6 +1,6 @@
 package engine.board;
 
-import java.util.Objects;
+import java.util.*;
 
 public class ToaDo {
     private int x;
@@ -10,6 +10,20 @@ public class ToaDo {
     public ToaDo(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Collection<ToaDo> getToaDoXungQuanh() {
+        List<ToaDo> dsToaDo = new ArrayList<>();
+        dsToaDo.add(new ToaDo(x-1, y-1));
+        dsToaDo.add(new ToaDo(x, y-1));
+        dsToaDo.add(new ToaDo(x+1, y-1));
+        dsToaDo.add(new ToaDo(x+1, y));
+        dsToaDo.add(new ToaDo(x+1, y+1));
+        dsToaDo.add(new ToaDo(x, y+1));
+        dsToaDo.add(new ToaDo(x-1, y+1));
+        dsToaDo.add(new ToaDo(x-1, y));
+
+        return Collections.unmodifiableCollection(dsToaDo);
     }
 
     @Override
@@ -25,6 +39,15 @@ public class ToaDo {
     public int hashCode() {
 
         return Objects.hash(x, y);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + x + "," + y + ")";
+    }
+
+    public static double tinhKhoangCach(ToaDo toaDoA, ToaDo toaDoB) {
+        return Math.sqrt(Math.pow(toaDoA.getX() - toaDoB.getX(), 2) + Math.pow(toaDoA.getY() - toaDoB.getY(), 2));
     }
 
     public int getX() {
