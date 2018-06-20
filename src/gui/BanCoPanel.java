@@ -34,7 +34,6 @@ public class BanCoPanel extends JPanel implements MouseListener{
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setSize(WIDTH, HEIGHT);
         this.addMouseListener(this);
-
         resetGame();
     }
 
